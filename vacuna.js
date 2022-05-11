@@ -11,24 +11,27 @@ https.get(url,(res) => {
 
     res.on("end", () => {
         try {
-            let json = JSON.parse(body)
 
-            let colegio = json.filter(element => element.Nombre_comuna == "COLEGIO SAN IGNACIO (RBD: 8609) - SANTIAGO")
+            
+            const colegio = "COLEGIO SAN IGNACIO (RBD: 8609) - SANTIAGO";
+
+            const datosColegio = JSON.parse(body).filter(element => element.Nombre_comuna == colegio);
 
             let vacu = 0;
             let vacuincom = 0;
             let noVacunados = 0;
 
-
-            colegio.forEach(item =>{
-                vacu = vacu + parseInt(item.porc_vacu)
-                vacuincom = vacuincom + parseInt(item.porc_vacuincom)
-                noVacunados = noVacunados + parseInt(item.porc_novacunados)
+            console.log("--==== Tabla de Datos ====--")
+            datosColegio.forEach(item =>{
+                vacu += parseInt(item.porc_vacu)
+                vacuincom += parseInt(item.porc_vacuincom)
+                noVacunados += parseInt(item.porc_novacunados)
+                console.log(`Nivel: ${item.nivel_alu}, Vacunacion Completa: ${item.porc_vacu}%, Vacunacion Incompleta: ${item.porc_vacuincom}%,  No Vacunados: ${item.porc_novacunados}%`)
             })
-
-            console.log("Vacunados ",vacu/colegio.length)
-            console.log("Vacunacion incompleta ", vacuincom/colegio.length)
-            console.log("No Vacunados", noVacunados/colegio.length)
+            console.log("---**** Resumen Colegio ****---")
+            console.log("Vacunados ",vacu/datosColegio.length)
+            console.log("Vacunacion incompleta ", vacuincom/datosColegio.length)
+            console.log("No Vacunados", noVacunados/datosColegio.length)
 
 
         } catch (error) {
